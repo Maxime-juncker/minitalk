@@ -88,6 +88,6 @@ $(BIN_D):
 PID = 0
 .PHONY: debug
 debug: all $(LOG_D)
-	gnome-terminal -- bash -c "./bin/server; exec bash"
+	./bin/server & echo $$! > $(LOG_D)server.pid && gnome-terminal -- bash -c "./bin/client $(shell cat $(LOG_D)server.pid); exec bash"
 
 .SILENT:

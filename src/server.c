@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <libft.h>
 
+int	is_transmiting = 0;
+
 void	signal_test(int signal)
 {
 	if (signal == SIGUSR1)
