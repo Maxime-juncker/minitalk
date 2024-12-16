@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2024/11/26 13:49:45 by mjuncker         ###   ########.fr        #
+#    Updated: 2024/12/16 11:42:54 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS =  ft_isalpha.c 			\
 		ft_strtrim.c 			\
 		ft_split.c 				\
 		ft_itoa.c 				\
+		ft_itoa_base.c 			\
 		ft_strmapi.c 			\
 		ft_putchar_fd.c 		\
 		ft_putstr_fd.c 			\
