@@ -67,18 +67,13 @@ void	signal_test(int signal)
 	data.tmp <<= 1;
 	if (signal == SIGUSR1)
 	{
-		// ft_printf("1");
 		data.tmp |= 1;
 	}
 	if (signal == SIGUSR2)
 	{
-		// ft_printf("0");
 		data.tmp |= 0;
 	}
 	data.bit_received++;
-	// ft_printf("client pid: %d\n", data.header.pid);
-	// kill(data.header.pid, SIGCONT);
-	kill(data.header.pid, SIGUSR1);
 	if (data.bit_received == 9)
 	{
 		ft_printf("==============================\n");
@@ -86,9 +81,12 @@ void	signal_test(int signal)
 		{
 			ft_printf("end of transmission\nstr: %s\n", data.str);
 			ft_printf("client pid: %d\nmsg size: %d\n", data.header.pid, data.header.msg_size);
-			ft_bzero(data.str, 500);
 			data.tmp = 0;
 			data.bit_received = 0;
+			data.str = 0x0;
+			data.header_received = 0;
+			data.header.pid = 0;
+			data.header.msg_size = 0;
 			return ;
 		}
 		data.str[ft_strlen(data.str)] = data.tmp;
@@ -96,6 +94,7 @@ void	signal_test(int signal)
 		data.tmp = 0;
 		data.bit_received = 0;
 	}
+	kill(data.header.pid, SIGUSR1);
 }
 
 void	set_singnal_action(void)
