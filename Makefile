@@ -10,7 +10,7 @@ OBJ_D = obj/
 SRCS_D = src/
 BIN_D = bin/
 LOG_D = log/
-INCLUDES_D = -Ilibft/includes/
+INCLUDES_D = -Ilibft/includes/ -Iincludes/
 CFLAGS = -Wall -Wextra -Werror -g3 $(INCLUDES_D)
 
 

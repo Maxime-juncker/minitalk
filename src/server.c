@@ -1,43 +1,100 @@
-#define _POSIX_C_SOURCE 200112L
-
-#include <stdio.h>
-#include <signal.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <libft.h>
+#include <minitalk.h>
 
 typedef struct s_data
 {
+	t_header	header;
+
+	int	header_received;
 	// once i = 32 add tmp to str and reset i
 	char *str;
-	int	data; //rename tmp
-	int	i;
+	int	tmp; //rename tmp
+	size_t	bit_received;
 } t_data;
 
-t_data data = {0, 0, 0x0};
+t_data data = {{0, 0}, 0, 0, 0, 0x0};
+
+void	receive_header(int signal)
+{
+	if (data.bit_received <= sizeof(int) * 8)
+	{
+		data.header.pid <<= 1;
+		if (signal == SIGUSR1)
+		{
+			// ft_printf("1", data.bit_received);
+			data.header.pid |= 1;
+		}
+		if (signal == SIGUSR2)
+		{
+			// ft_printf("0", data.bit_received);
+			data.header.pid |= 0;
+		}
+		data.bit_received++;
+		return ;
+	}
+	else if (data.bit_received - 1 <= sizeof(int) * 8 * 2)
+	{
+		data.header.msg_size <<= 1;
+		if (signal == SIGUSR1)
+		{
+			data.header.msg_size |= 1;
+		}
+		if (signal == SIGUSR2)
+		{
+			data.header.msg_size |= 0;
+		}
+		data.bit_received++;
+		if (data.bit_received - 1 <= sizeof(int) * 8 * 2)
+			return ;
+	}
+	data.bit_received = 0;
+	data.header_received = 1;
+}
 
 void	signal_test(int signal)
 {
-	data.data <<= 1;
+
+	if (data.header_received == 0)
+	{
+		receive_header(signal);
+		return ;
+	}
+	if (data.str == NULL)
+	{
+		data.str = ft_calloc(data.header.msg_size + 1, 1);
+		if (data.str == NULL)
+			exit(1);
+	}
+	data.tmp <<= 1;
 	if (signal == SIGUSR1)
 	{
-		ft_printf("1");
-		data.data |= 1;
+		// ft_printf("1");
+		data.tmp |= 1;
 	}
 	if (signal == SIGUSR2)
 	{
-		ft_printf("0");
-		data.data |= 0;
+		// ft_printf("0");
+		data.tmp |= 0;
 	}
-	data.i++;
-	if (data.i == 33)
+	data.bit_received++;
+	// ft_printf("client pid: %d\n", data.header.pid);
+	// kill(data.header.pid, SIGCONT);
+	kill(data.header.pid, SIGUSR1);
+	if (data.bit_received == 9)
 	{
-		data.str[ft_strlen(data.str)] = data.data;
-		ft_printf("\n==============================\n");
-		ft_printf("end of transmission\n%d (%s) %s\n", data.data, ft_itoa_base(data.data, "01"), data.str);
-		data.data = 0;
-		data.i = 0;
+		ft_printf("==============================\n");
+		if (data.tmp == 0)
+		{
+			ft_printf("end of transmission\nstr: %s\n", data.str);
+			ft_printf("client pid: %d\nmsg size: %d\n", data.header.pid, data.header.msg_size);
+			ft_bzero(data.str, 500);
+			data.tmp = 0;
+			data.bit_received = 0;
+			return ;
+		}
+		data.str[ft_strlen(data.str)] = data.tmp;
+		ft_printf("received new char: %c (%s)\n", data.tmp, ft_itoa_base(data.tmp, "01"));
+		data.tmp = 0;
+		data.bit_received = 0;
 	}
 }
 
@@ -54,9 +111,6 @@ void	set_singnal_action(void)
 
 int	main(void)
 {
-	data.str = malloc(500);
-	if (data.str == NULL)
-		exit(0);
 	set_singnal_action();
 	printf("PID: %d\n", getpid());
 	while (1)
