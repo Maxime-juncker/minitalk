@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/17 12:42:05 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/18 10:39:59 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_itoa(int n);
 char	*ft_itoa_base(int n, const char *base);
 char	*u_ft_itoa(unsigned int n);
+char	*u_ft_itoa_base(unsigned int n, const char *base);
 char	*get_next_line(int fd);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);

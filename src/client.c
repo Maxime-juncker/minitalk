@@ -38,7 +38,6 @@ void	send_data(char *bin, int msg_size, int serv_pid)
 		{
 			// ft_printf("sending SIGURS2 (0)\n");
 			kill(serv_pid, SIGUSR2); // |= 0
-
 		}
 		if (header_sent == 1)
 			pause();
@@ -50,7 +49,7 @@ void	send_data(char *bin, int msg_size, int serv_pid)
 
 void	send_letter(char *bin, int serv_pid)
 {
-	send_data(bin, sizeof(char) * 8, serv_pid);
+	send_data(bin, sizeof(int) * 8, serv_pid);
 }
 
 void	send_header(const t_header *header, int serv_pid)
@@ -80,17 +79,49 @@ void	send_str(const char *str, int serv_pid)
 	int	i = 0;
 	while (str[i])
 	{
-		send_letter(ft_itoa_base(str[i], "01"), serv_pid);
+		send_letter(u_ft_itoa_base(str[i], "01"), serv_pid);
 		i++;
 	}
-	send_letter(ft_itoa_base('\0', "01"), serv_pid);
+	send_letter(u_ft_itoa_base('\0', "01"), serv_pid);
 
 }
 
 int main(int argc, char **argv)
 {
+	(void)argc;
+	(void)argv;
+
+	// char	*bin;
+	char	*str = "Hello, 😀 World!";
+	// char	*cpy = ft_calloc(500, 1);
+	// int tmp = 0;
+	// int j = 0;
+	// int	i = 0;
+	// while (str[i])
+	// {
+	// 	bin = u_ft_itoa_base(str[i], "01");
+	// 	ft_printf("%c (%s)\n", str[i], bin);
+	// 	j = 0;
+	// 	while (bin[j])
+	// 	{
+	// 		tmp <<= 1;
+	// 		if (bin[j] == '1')
+	// 		{
+	// 			tmp |= 1;
+	// 		}
+	// 		if (bin[j] == '0')
+	// 		{
+	// 			tmp |= 0;
+	// 		}
+	// 		j++;
+	// 	}
+	// 	cpy[i] = tmp;
+	// 	tmp = 0;
+	// 	i++;
+	// }
+	// ft_printf("%s\n", cpy);
+
 	int	serv_pid;
-	// char	*txt;
 
 	signal(SIGUSR1, handle_sig);
 
@@ -105,9 +136,7 @@ int main(int argc, char **argv)
 		send_str(argv[2], serv_pid);
 		return 0;
 	}
-
-	send_str("Hello, World!", serv_pid);
-	// send_str("emoji : ✊");
+	send_str(str, serv_pid);
+    // ft_printf("%x", wide_char);
 	// send_str("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m");
 }
-

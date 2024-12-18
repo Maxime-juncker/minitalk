@@ -48,3 +48,42 @@ char	*ft_itoa_base(int n, const char *base)
 	res[len] = '\0';
 	return (res);
 }
+
+static size_t	uget_nb_len(unsigned int n, int base_len)
+{
+	size_t		i;
+	long int	nb;
+
+	nb = (long)n;
+	i = 1;
+	while (nb / base_len > 0)
+	{
+		i++;
+		nb /= base_len;
+	}
+	return (i);
+}
+
+char	*u_ft_itoa_base(unsigned int n, const char* base)
+{
+	unsigned long int	nb;
+	char				*res;
+	size_t				i;
+	size_t				len;
+
+	len = uget_nb_len(n, ft_strlen(base));
+	nb = (unsigned long)n;
+	res = malloc(len + 1);
+	i = 0;
+	if (!res)
+		return (NULL);
+	if (n == 0)
+		res[0] = '0';
+	while (nb > 0)
+	{
+		res[len - i++ - 1] = base[nb % ft_strlen(base)];
+		nb /= ft_strlen(base);
+	}
+	res[len] = '\0';
+	return (res);
+}

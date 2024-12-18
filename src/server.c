@@ -73,7 +73,7 @@ void	signal_test(int signal)
 		data.tmp |= 0;
 	}
 	data.bit_received++;
-	if (data.bit_received == 9)
+	if (data.bit_received == 33)
 	{
 		if (data.tmp == 0)
 		{
@@ -92,7 +92,7 @@ void	signal_test(int signal)
 			data.str_len = 0;
 			return ;
 		}
-		// ft_printf("%c", data.tmp);
+		// ft_printf("tmp: %c (%s)", data.tmp, ft_itoa_base(data.tmp, "01"));
 		data.str[data.str_len] = data.tmp;
 		data.str_len++;
 		data.tmp = 0;
