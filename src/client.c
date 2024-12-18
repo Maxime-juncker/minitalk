@@ -1,7 +1,18 @@
-#include <minitalk.h>
-#include <fcntl.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
+/*   Updated: 2024/12/18 13:39:44 by mjuncker         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	header_send = 0;
+#include <minitalk.h>
+
+int	g_header_send = 0;
 
 void	handle_sig(int signal)
 {
@@ -18,31 +29,27 @@ void	send_data(char *bin, int msg_size, int serv_pid)
 
 	len = ft_strlen(bin);
 	i = msg_size;
-
 	while (i >= 0)
 	{
 		if (i < len)
 		{
 			if (bin[len - i - 1] == '1')
 			{
-				// ft_printf("sending SIGURS1 (1)\n");
-				kill(serv_pid, SIGUSR1); // |= 1
-				if (header_send)
+				kill(serv_pid, SIGUSR1);
+				if (g_header_send)
 					pause();
 			}
 			else
 			{
-				// ft_printf("sending SIGURS2 (0)\n");
-				kill(serv_pid, SIGUSR2); // |= 0
-				if (header_send)
+				kill(serv_pid, SIGUSR2);
+				if (g_header_send)
 					pause();
 			}
 		}
 		else
 		{
-			// ft_printf("sending SIGURS2 (0)\n");
-			kill(serv_pid, SIGUSR2); // |= 0
-			if (header_send)
+			kill(serv_pid, SIGUSR2);
+			if (g_header_send)
 				pause();
 		}
 		usleep(WAITIME);
@@ -58,9 +65,9 @@ void	send_letter(char *bin, int serv_pid)
 void	send_header(const t_header *header, int serv_pid)
 {
 	char	*bin;
+
 	ft_printf("pid: %d\n", header->pid);
 	ft_printf("msg size: %d\n", header->msg_size);
-
 	bin = ft_itoa_base(header->pid, "01");
 	ft_printf("sending pid (%s)\n", bin);
 	send_data(bin, sizeof(int) * 8, serv_pid);
@@ -72,43 +79,30 @@ void	send_header(const t_header *header, int serv_pid)
 void	send_str(const char *str, int serv_pid)
 {
 	t_header	header;
+	int			i;
 
 	header.pid = getpid();
 	header.msg_size = (ft_strlen(str) + 1) * sizeof(char);
-
 	send_header(&header, serv_pid);
-
-	int	i = 0;
+	i = 0;
 	while (str[i])
 	{
 		send_letter(u_ft_itoa_base(str[i], "01"), serv_pid);
 		i++;
 	}
 	send_letter(u_ft_itoa_base('\0', "01"), serv_pid);
-
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
-
 	int	serv_pid;
 
 	signal(SIGUSR1, handle_sig);
 	signal(SIGCONT, handle_sig);
-
 	if (argc <= 1)
 		return (0);
-
 	serv_pid = atoi(argv[1]);
 	ft_printf("setting server pid to %d\n", serv_pid);
-
 	if (argc == 3)
-	{
 		send_str(argv[2], serv_pid);
-		return 0;
-	}
-    // ft_printf("%x", wide_char);
-	send_str("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m", serv_pid);
 }

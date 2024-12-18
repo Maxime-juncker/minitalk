@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minitalk.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 13:33:44 by mjuncker          #+#    #+#             */
+/*   Updated: 2024/12/18 13:40:10 by mjuncker         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINITALK_H
 # define MINITALK_H
 
@@ -6,7 +18,11 @@
 
 # ifndef WAITIME
 #  define WAITIME 200
-#endif
+# endif
+
+# ifndef DEBUG
+#  define DEBUG 1
+# endif
 
 # include <stdio.h>
 # include <signal.h>
@@ -21,5 +37,15 @@ typedef struct s_header
 	int	msg_size;
 }	t_header;
 
+typedef struct s_data
+{
+	t_header	header;
+
+	int			header_received;
+	int			tmp;
+	size_t		bit_received;
+	char		*str;
+	int			str_len;
+}	t_data;
 
 #endif
