@@ -35,11 +35,11 @@ libft/bin/libft.a:
 	echo "$(YELLOW)[MAKE]: libft$(RESET)"
 	$(MAKE)  -C libft
 
-$(BIN_D)server: src/server.c
+$(BIN_D)server: src/server.c includes/minitalk.h
 	echo "$(BLUE)[COMPILING]: server$(RESET)"
 	$(CC) $(CFLAGS) src/server.c libft/bin/libft.a -o $(BIN_D)server
 
-$(BIN_D)client: src/client.c
+$(BIN_D)client: src/client.c includes/minitalk.h
 	echo "$(BLUE)[COMPILING]: client$(RESET)"
 	$(CC) $(CFLAGS) src/client.c libft/bin/libft.a -o $(BIN_D)client
 

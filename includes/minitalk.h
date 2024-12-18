@@ -4,6 +4,10 @@
 # define _POSIX_C_SOURCE 200112L
 # define _DEFAULT_SOURCE
 
+# ifndef WAITIME
+#  define WAITIME 200
+#endif
+
 # include <stdio.h>
 # include <signal.h>
 # include <string.h>

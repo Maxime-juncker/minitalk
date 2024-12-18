@@ -1,15 +1,15 @@
 #include <minitalk.h>
 #include <fcntl.h>
 
+int	header_send = 0;
+
 void	handle_sig(int signal)
 {
 	if (signal == SIGUSR1)
 	{
 		return ;
 	}
-
 }
-int header_sent = 0;
 
 void	send_data(char *bin, int msg_size, int serv_pid)
 {
@@ -27,22 +27,25 @@ void	send_data(char *bin, int msg_size, int serv_pid)
 			{
 				// ft_printf("sending SIGURS1 (1)\n");
 				kill(serv_pid, SIGUSR1); // |= 1
+				if (header_send)
+					pause();
 			}
 			else
 			{
 				// ft_printf("sending SIGURS2 (0)\n");
 				kill(serv_pid, SIGUSR2); // |= 0
+				if (header_send)
+					pause();
 			}
 		}
 		else
 		{
 			// ft_printf("sending SIGURS2 (0)\n");
 			kill(serv_pid, SIGUSR2); // |= 0
+			if (header_send)
+				pause();
 		}
-		if (header_sent == 1)
-			pause();
-		else
-			usleep(15);
+		usleep(WAITIME);
 		i--;
 	}
 }
@@ -64,7 +67,6 @@ void	send_header(const t_header *header, int serv_pid)
 	bin = ft_itoa_base(header->msg_size, "01");
 	ft_printf("sending msg size (%s)\n", bin);
 	send_data(bin, sizeof(int) * 8, serv_pid);
-
 }
 
 void	send_str(const char *str, int serv_pid)
@@ -72,7 +74,7 @@ void	send_str(const char *str, int serv_pid)
 	t_header	header;
 
 	header.pid = getpid();
-	header.msg_size = ft_strlen(str) * sizeof(char);
+	header.msg_size = (ft_strlen(str) + 1) * sizeof(char);
 
 	send_header(&header, serv_pid);
 
@@ -91,39 +93,10 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
-	// char	*bin;
-	char	*str = "Hello, 😀 World!";
-	// char	*cpy = ft_calloc(500, 1);
-	// int tmp = 0;
-	// int j = 0;
-	// int	i = 0;
-	// while (str[i])
-	// {
-	// 	bin = u_ft_itoa_base(str[i], "01");
-	// 	ft_printf("%c (%s)\n", str[i], bin);
-	// 	j = 0;
-	// 	while (bin[j])
-	// 	{
-	// 		tmp <<= 1;
-	// 		if (bin[j] == '1')
-	// 		{
-	// 			tmp |= 1;
-	// 		}
-	// 		if (bin[j] == '0')
-	// 		{
-	// 			tmp |= 0;
-	// 		}
-	// 		j++;
-	// 	}
-	// 	cpy[i] = tmp;
-	// 	tmp = 0;
-	// 	i++;
-	// }
-	// ft_printf("%s\n", cpy);
-
 	int	serv_pid;
 
 	signal(SIGUSR1, handle_sig);
+	signal(SIGCONT, handle_sig);
 
 	if (argc <= 1)
 		return (0);
@@ -136,7 +109,6 @@ int main(int argc, char **argv)
 		send_str(argv[2], serv_pid);
 		return 0;
 	}
-	send_str(str, serv_pid);
     // ft_printf("%x", wide_char);
-	// send_str("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m");
+	send_str("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m", serv_pid);
 }

@@ -52,7 +52,7 @@ void	receive_header(int signal)
 
 void	signal_test(int signal)
 {
-
+	// static int i = 0;
 	if (data.header_received == 0)
 	{
 		receive_header(signal);
@@ -60,7 +60,7 @@ void	signal_test(int signal)
 	}
 	if (data.str == 0x0)
 	{
-		data.str = malloc(data.header.msg_size + 1);
+		data.str = ft_calloc(data.header.msg_size + 1, 1);
 		data.str_len = 0;
 	}
 	data.tmp <<= 1;
@@ -83,22 +83,29 @@ void	signal_test(int signal)
 			ft_printf("%s\n", data.str);
 			ft_printf("==============================\n");
 
-			data.tmp = 0;
-			data.bit_received = 0;
-			data.header_received = 0;
 			data.header.pid = 0;
 			data.header.msg_size = 0;
+			data.header_received = 0;
+			data.tmp = 0;
+			data.bit_received = 0;
+			free(data.str);
 			data.str = 0x0;
 			data.str_len = 0;
+			// i = 0;
 			return ;
 		}
-		// ft_printf("tmp: %c (%s)", data.tmp, ft_itoa_base(data.tmp, "01"));
-		data.str[data.str_len] = data.tmp;
-		data.str_len++;
-		data.tmp = 0;
-		data.bit_received = 0;
+		else
+		{
+			// ft_printf("tmp: %c (%s)\n", data.tmp, ft_itoa_base(data.tmp, "01"));
+			data.str[data.str_len] = data.tmp;
+			data.str_len++;
+			data.tmp = 0;
+			data.bit_received = 0;
+		}
 	}
 	kill(data.header.pid, SIGUSR1);
+	// i++;
+	// printf("%d\n", i);
 }
 
 void	set_singnal_action(void)
