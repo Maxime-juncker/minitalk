@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:06:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:19:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,13 @@
 
 int	g_header_send = 0;
 
-void	send_bit(char bit, int i, int len, int serv_pid)
+void	send_bit(char bit, int serv_pid)
 {
-	if (i < len)
+	if (bit == '1')
 	{
-		if (bit == '1')
-		{
-			kill(serv_pid, SIGUSR1);
-			if (g_header_send)
-				pause();
-		}
-		else
-		{
-			kill(serv_pid, SIGUSR2);
-			if (g_header_send)
-				pause();
-		}
+		kill(serv_pid, SIGUSR1);
+		if (g_header_send)
+			pause();
 	}
 	else
 	{
@@ -49,7 +40,10 @@ void	send_data(char *bin, int serv_pid)
 	i = sizeof(int) * 8;
 	while (i >= 0)
 	{
-		send_bit(bin[len - i - 1], i, len, serv_pid);
+		if (i < len)
+			send_bit(bin[len - i - 1], serv_pid);
+		else
+			send_bit(0, serv_pid);
 		i--;
 	}
 }
@@ -60,14 +54,17 @@ void	send_header(const t_header *header, int serv_pid)
 
 	bin = ft_itoa_base(header->pid, "01");
 	send_data(bin, serv_pid);
+	free(bin);
 	bin = ft_itoa_base(header->msg_size, "01");
 	send_data(bin, serv_pid);
+	free(bin);
 }
 
 void	send_str(const char *str, int serv_pid)
 {
 	t_header	header;
 	int			i;
+	char		*bin;
 
 	header.pid = getpid();
 	header.msg_size = (ft_strlen(str) + 1) * sizeof(char);
@@ -75,10 +72,14 @@ void	send_str(const char *str, int serv_pid)
 	i = 0;
 	while (str[i])
 	{
-		send_data(u_ft_itoa_base(str[i], "01"), serv_pid);
+		bin = u_ft_itoa_base(str[i], "01");
+		send_data(bin, serv_pid);
+		free(bin);
 		i++;
 	}
-	send_data(u_ft_itoa_base('\0', "01"), serv_pid);
+	bin = u_ft_itoa_base('\0', "01");
+	send_data(bin, serv_pid);
+	free(bin);
 	ft_printf("message sent!\n");
 }
 
