@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:27:53 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:39:24 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:58:45 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	handle_sig(int signal)
 {
 	if (signal == SIGUSR1)
+		return ;
+	if (signal == SIGUSR2)
 	{
+		ft_printf("server has receive message!\n");
 		return ;
 	}
 }

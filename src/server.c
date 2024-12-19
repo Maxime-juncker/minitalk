@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:34:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:41:39 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:00:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	reset_data(void)
 	if (g_data.tmp == 0)
 	{
 		ft_printf("%s\n", g_data.str);
+		kill(g_data.header.pid, SIGUSR2);
 		g_data.header.pid = 0;
 		g_data.header.msg_size = 0;
 		g_data.header_received = 0;
@@ -78,7 +79,9 @@ void	signal_receive(int signal)
 	if (g_data.bit_received == 33)
 	{
 		if (reset_data() == 1)
+		{
 			return ;
+		}
 	}
 	kill(g_data.header.pid, SIGUSR1);
 }

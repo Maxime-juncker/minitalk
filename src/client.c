@@ -6,28 +6,18 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:43:33 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:00:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minitalk.h>
 
-int	g_header_send = 0;
-
 void	send_bit(char bit, int serv_pid)
 {
 	if (bit == '1')
-	{
 		kill(serv_pid, SIGUSR1);
-		if (g_header_send)
-			pause();
-	}
 	else
-	{
 		kill(serv_pid, SIGUSR2);
-		if (g_header_send)
-			pause();
-	}
 	usleep(WAITIME);
 }
 
@@ -88,7 +78,6 @@ void	send_str(const char *str, int serv_pid)
 		return ;
 	send_data(bin, serv_pid);
 	free(bin);
-	ft_printf("message sent!\n");
 }
 
 int	main(int argc, char **argv)
@@ -96,18 +85,18 @@ int	main(int argc, char **argv)
 	int	serv_pid;
 
 	signal(SIGUSR1, &handle_sig);
+	signal(SIGUSR2, &handle_sig);
 	if (argc != 3 || check_arg(argv[1]) == 1)
 	{
 		ft_printf("invalide params\n");
 		return (0);
 	}
-	serv_pid = atoi(argv[1]);
+	serv_pid = ft_atoi(argv[1]);
 	if (serv_pid == 0)
 	{
 		ft_printf("invalide params\n");
 		return (0);
 	}
 	ft_printf("sending message to server (%d)\n", serv_pid);
-	if (argc == 3)
-		send_str(argv[2], serv_pid);
+	send_str(argv[2], serv_pid);
 }
