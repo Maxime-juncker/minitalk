@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:33:44 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/18 16:16:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:04:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 
 # ifndef WAITIME
 #  define WAITIME 200
-# endif
-
-# ifndef DEBUG
-#  define DEBUG 0
 # endif
 
 # include <stdio.h>
@@ -53,5 +49,6 @@ void	print_str(t_data data);
 void	handle_sig(int signal);
 void	set_signal_action(void (*f)(int));
 int		check_bit(int signal);
+int		check_arg(char *argv1);
 
 #endif

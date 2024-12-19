@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/18 16:17:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:06:11 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,9 @@ void	send_header(const t_header *header, int serv_pid)
 {
 	char	*bin;
 
-	ft_printf("pid: %d\n", header->pid);
-	ft_printf("msg size: %d\n", header->msg_size);
 	bin = ft_itoa_base(header->pid, "01");
-	ft_printf("sending pid (%s)\n", bin);
 	send_data(bin, serv_pid);
 	bin = ft_itoa_base(header->msg_size, "01");
-	ft_printf("sending msg size (%s)\n", bin);
 	send_data(bin, serv_pid);
 }
 
@@ -83,6 +79,7 @@ void	send_str(const char *str, int serv_pid)
 		i++;
 	}
 	send_data(u_ft_itoa_base('\0', "01"), serv_pid);
+	ft_printf("message sent!\n");
 }
 
 int	main(int argc, char **argv)
@@ -90,10 +87,18 @@ int	main(int argc, char **argv)
 	int	serv_pid;
 
 	signal(SIGUSR1, &handle_sig);
-	if (argc <= 1)
+	if (argc != 3 || check_arg(argv[1]) == 1)
+	{
+		ft_printf("invalide params\n");
 		return (0);
+	}
 	serv_pid = atoi(argv[1]);
-	ft_printf("setting server pid to %d\n", serv_pid);
+	if (serv_pid == 0)
+	{
+		ft_printf("invalide params\n");
+		return (0);
+	}
+	ft_printf("sending message to server (%d)\n", serv_pid);
 	if (argc == 3)
 		send_str(argv[2], serv_pid);
 }

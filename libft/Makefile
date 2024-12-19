@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2024/12/16 11:42:54 by mjuncker         ###   ########.fr        #
+#    Updated: 2024/12/19 10:44:52 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,7 @@ $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 	@echo "$(GREEN)[SUCCESS]$(RESET)"
 
 
-$(OBJ_D)%.o: $(SRCS_D)%.c | $(OBJ_D)
+$(OBJ_D)%.o: $(SRCS_D)%.c includes/libft.h | $(OBJ_D)
 	@echo "$(BLUE)[COMPILING]: $@$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 

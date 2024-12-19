@@ -13,6 +13,7 @@ LOG_D = log/
 INCLUDES_D = -Ilibft/includes/ -Iincludes/
 CFLAGS = -Wall -Wextra -Werror -g3 $(INCLUDES_D)
 
+DEPS = src/utils.c includes/minitalk.h libft/bin/libft.a libft/includes/libft.h Makefile
 
 COBJ := $(addprefix $(OBJ_D), $(COBJ))
 SOBJ := $(addprefix $(OBJ_D), $(SOBJ))
@@ -28,18 +29,20 @@ BLUE 	= \033[34m
 
 RM = rm -fr
 
-all: $(BIN_D) libft/bin/libft.a $(BIN_D)server $(BIN_D)client
+all:
+	$(MAKE) libft
+	$(MAKE) $(BIN_D)server
+	$(MAKE) $(BIN_D)client
 
 .PHONY: libft
-libft/bin/libft.a:
-	echo "$(YELLOW)[MAKE]: libft$(RESET)"
-	$(MAKE)  -C libft
+libft:
+	$(MAKE) -C libft
 
-$(BIN_D)server: src/server.c src/utils.c includes/minitalk.h
+$(BIN_D)server: src/server.c $(DEPS) | $(BIN_D)
 	echo "$(BLUE)[COMPILING]: server$(RESET)"
 	$(CC) $(CFLAGS) src/server.c src/utils.c libft/bin/libft.a -o $(BIN_D)server
 
-$(BIN_D)client: src/client.c src/utils.c includes/minitalk.h
+$(BIN_D)client: src/client.c $(DEPS)
 	echo "$(BLUE)[COMPILING]: client$(RESET)"
 	$(CC) $(CFLAGS) src/client.c src/utils.c libft/bin/libft.a -o $(BIN_D)client
 
