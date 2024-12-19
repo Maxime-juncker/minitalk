@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:33:44 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/18 13:40:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:16:40 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # endif
 
 # ifndef DEBUG
-#  define DEBUG 1
+#  define DEBUG 0
 # endif
 
 # include <stdio.h>
@@ -47,5 +47,11 @@ typedef struct s_data
 	char		*str;
 	int			str_len;
 }	t_data;
+
+// utils.c
+void	print_str(t_data data);
+void	handle_sig(int signal);
+void	set_signal_action(void (*f)(int));
+int		check_bit(int signal);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:15:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/16 11:34:59 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:35:53 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,3 @@ int	ft_printf(const char *s, ...)
 	}
 	return (nb_write);
 }
-

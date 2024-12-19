@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:34:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/18 13:38:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:10:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,19 @@
 
 t_data	g_data = {{0, 0}, 0, 0, 0, 0x0, 0};
 
-#if DEBUG
-
-void	print_str(void)
-{
-	ft_printf("\n");
-	ft_printf("end of transmission\n");
-	ft_printf("client pid: %d\nmsg size: %d\n", \
-	g_data.header.pid, g_data.header.msg_size);
-	ft_printf("%s\n", g_data.str);
-	ft_printf("==============================\n");
-}
-#else
-
-void	print_str(void)
-{
-	ft_printf("%s\n", g_data.str);
-}
-#endif
-
 void	receive_header(int signal)
 {
 	if (g_data.bit_received <= sizeof(int) * 8)
 	{
 		g_data.header.pid <<= 1;
-		if (signal == SIGUSR1)
-			g_data.header.pid |= 1;
-		if (signal == SIGUSR2)
-			g_data.header.pid |= 0;
+		g_data.header.pid |= check_bit(signal);
 		g_data.bit_received++;
 		return ;
 	}
 	else if (g_data.bit_received - 1 <= sizeof(int) * 8 * 2)
 	{
 		g_data.header.msg_size <<= 1;
-		if (signal == SIGUSR1)
-		{
-			g_data.header.msg_size |= 1;
-		}
-		if (signal == SIGUSR2)
-		{
-			g_data.header.msg_size |= 0;
-		}
+		g_data.header.msg_size |= check_bit(signal);
 		g_data.bit_received++;
 		if (g_data.bit_received - 1 <= sizeof(int) * 8 * 2)
 			return ;
@@ -64,7 +35,32 @@ void	receive_header(int signal)
 	g_data.header_received = 1;
 }
 
-void	signal_test(int signal)
+int	reset_data(void)
+{
+	if (g_data.tmp == 0)
+	{
+		print_str(g_data);
+		g_data.header.pid = 0;
+		g_data.header.msg_size = 0;
+		g_data.header_received = 0;
+		g_data.tmp = 0;
+		g_data.bit_received = 0;
+		free(g_data.str);
+		g_data.str = 0x0;
+		g_data.str_len = 0;
+		return (1);
+	}
+	else
+	{
+		g_data.str[g_data.str_len] = g_data.tmp;
+		g_data.str_len++;
+		g_data.tmp = 0;
+		g_data.bit_received = 0;
+	}
+	return (0);
+}
+
+void	signal_receive(int signal)
 {
 	if (g_data.header_received == 0)
 	{
@@ -77,55 +73,20 @@ void	signal_test(int signal)
 		g_data.str_len = 0;
 	}
 	g_data.tmp <<= 1;
-	if (signal == SIGUSR1)
-	{
-		g_data.tmp |= 1;
-	}
-	if (signal == SIGUSR2)
-	{
-		g_data.tmp |= 0;
-	}
+	g_data.tmp |= check_bit(signal);
 	g_data.bit_received++;
 	if (g_data.bit_received == 33)
 	{
-		if (g_data.tmp == 0)
-		{
-			print_str();
-			g_data.header.pid = 0;
-			g_data.header.msg_size = 0;
-			g_data.header_received = 0;
-			g_data.tmp = 0;
-			g_data.bit_received = 0;
-			free(g_data.str);
-			g_data.str = 0x0;
-			g_data.str_len = 0;
+		if (reset_data() == 1)
 			return ;
-		}
-		else
-		{
-			g_data.str[g_data.str_len] = g_data.tmp;
-			g_data.str_len++;
-			g_data.tmp = 0;
-			g_data.bit_received = 0;
-		}
 	}
 	kill(g_data.header.pid, SIGUSR1);
-}
-
-void	set_singnal_action(void)
-{
-	struct sigaction	act;
-
-	memset(&act, 0, sizeof(act));
-	act.sa_handler = &signal_test;
-	sigaction(SIGUSR1, &act, NULL);
-	sigaction(SIGUSR2, &act, NULL);
 }
 
 int	main(void)
 {
 	printf("PID: %d\n", getpid());
-	set_singnal_action();
+	set_signal_action(&signal_receive);
 	while (1)
 	{
 		continue ;

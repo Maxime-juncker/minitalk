@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/19 10:36:07 by mjuncker          #+#    #+#             */
+/*   Updated: 2024/12/19 10:36:08 by mjuncker         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static size_t	get_nb_len_base(int n, int base_len)
@@ -64,7 +76,7 @@ static size_t	uget_nb_len(unsigned int n, int base_len)
 	return (i);
 }
 
-char	*u_ft_itoa_base(unsigned int n, const char* base)
+char	*u_ft_itoa_base(unsigned int n, const char *base)
 {
 	unsigned long int	nb;
 	char				*res;
