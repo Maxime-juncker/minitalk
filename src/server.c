@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:34:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/18 16:10:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:41:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	reset_data(void)
 {
 	if (g_data.tmp == 0)
 	{
-		print_str(g_data);
+		ft_printf("%s\n", g_data.str);
 		g_data.header.pid = 0;
 		g_data.header.msg_size = 0;
 		g_data.header_received = 0;
@@ -85,7 +85,7 @@ void	signal_receive(int signal)
 
 int	main(void)
 {
-	printf("PID: %d\n", getpid());
+	ft_printf("PID: %d\n", getpid());
 	set_signal_action(&signal_receive);
 	while (1)
 	{

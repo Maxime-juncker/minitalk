@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:19:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:43:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,13 @@ void	send_header(const t_header *header, int serv_pid)
 	char	*bin;
 
 	bin = ft_itoa_base(header->pid, "01");
+	if (bin == NULL)
+		return ;
 	send_data(bin, serv_pid);
 	free(bin);
 	bin = ft_itoa_base(header->msg_size, "01");
+	if (bin == NULL)
+		return ;
 	send_data(bin, serv_pid);
 	free(bin);
 }
@@ -73,11 +77,15 @@ void	send_str(const char *str, int serv_pid)
 	while (str[i])
 	{
 		bin = u_ft_itoa_base(str[i], "01");
+		if (bin == NULL)
+			return ;
 		send_data(bin, serv_pid);
 		free(bin);
 		i++;
 	}
 	bin = u_ft_itoa_base('\0', "01");
+	if (bin == NULL)
+		return ;
 	send_data(bin, serv_pid);
 	free(bin);
 	ft_printf("message sent!\n");

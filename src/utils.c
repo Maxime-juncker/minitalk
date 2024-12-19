@@ -6,16 +6,11 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:27:53 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 11:05:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:39:24 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-void	print_str(t_data data)
-{
-	ft_printf("%s\n", data.str);
-}
 
 void	handle_sig(int signal)
 {
