@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 15:00:39 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:56:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ int	main(int argc, char **argv)
 	signal(SIGUSR2, &handle_sig);
 	if (argc != 3 || check_arg(argv[1]) == 1)
 	{
-		ft_printf("invalide params\n");
+		ft_printf("invalid params\n");
 		return (0);
 	}
 	serv_pid = ft_atoi(argv[1]);
 	if (serv_pid == 0)
 	{
-		ft_printf("invalide params\n");
+		ft_printf("invalid params\n");
 		return (0);
 	}
 	ft_printf("sending message to server (%d)\n", serv_pid);
