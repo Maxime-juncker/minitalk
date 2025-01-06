@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:34:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 15:00:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/01/06 09:43:01 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	signal_receive(int signal)
 	if (g_data.str == 0x0)
 	{
 		g_data.str = ft_calloc(g_data.header.msg_size + 1, 1);
+		if (g_data.str == NULL)
+			return ;
 		g_data.str_len = 0;
 	}
 	g_data.tmp <<= 1;
