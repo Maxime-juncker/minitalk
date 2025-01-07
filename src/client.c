@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/01/04 13:56:22 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:46:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	serv_pid = ft_atoi(argv[1]);
-	if (serv_pid == 0)
+	if (serv_pid == 0 || kill(serv_pid, 0) == -1)
 	{
-		ft_printf("invalid params\n");
-		return (0);
+		ft_printf("Wrong pid\n");
+		return(0);
 	}
 	ft_printf("sending message to server (%d)\n", serv_pid);
 	send_str(argv[2], serv_pid);
