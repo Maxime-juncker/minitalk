@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:27:53 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/12/19 14:58:45 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:44:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	set_signal_action(void (*f)(int))
 {
 	struct sigaction	act;
 
-	memset(&act, 0, sizeof(act));
+	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = f;
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
