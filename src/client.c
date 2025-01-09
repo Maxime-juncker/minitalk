@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:38:16 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/01/07 11:46:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/01/09 09:55:58 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	if (serv_pid == 0 || kill(serv_pid, 0) == -1)
 	{
 		ft_printf("Wrong pid\n");
-		return(0);
+		return (0);
 	}
 	ft_printf("sending message to server (%d)\n", serv_pid);
 	send_str(argv[2], serv_pid);
