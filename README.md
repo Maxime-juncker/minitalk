@@ -3,7 +3,7 @@ minitalk project of 42
 ## Goals
 creating a server and a client:
 - the server need to print is pid
-- using the server pid the client can send a message of any size to the server (message can includes utf8 characters 😨)
+- using the server pid the client can send a message of any size to the server (message can includes utf8 characters 😲)
 - the server need to print the received message and reply to the client
 
 ## Compile it yourself
